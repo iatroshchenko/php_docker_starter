@@ -1,0 +1,40 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: './docker/nginx'
+      dockerfile: nginx.docker
+    volumes:
+      - ./:/var/www/app
+    ports:
+      - "80:80"
+  php-fpm:
+    build:
+      context: './docker/php-fpm'
+      dockerfile: php-fpm.Dockerfile
+    volumes:
+      - ./:/var/www/app
+  nodejs:
+    image: node:10.11-jessie
+    volumes:
+      - ./:/var/www/app
+    working_dir: /var/www/app
+    tty: true
+  redis:
+    image: redis
+    ports:
+     - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - ./docker/redis/data:/data
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_ROOT_PASSWORD: secret
