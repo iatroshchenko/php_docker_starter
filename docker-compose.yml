@@ -3,7 +3,7 @@ services:
   nginx:
     build:
       context: './docker/nginx'
-      dockerfile: nginx.docker
+      dockerfile: nginx.Dockerfile
     volumes:
       - ./:/var/www/app
     ports:
